@@ -1,0 +1,282 @@
+[
+  {
+    "Components": "1. Air-side HVACR, fans, air handlers, air conditioning units. cabinet heaters. air distribution boxes. and other mechanical components constructed of sheet metal framing",
+    "CAR_below": 1.4,
+    "CAR_above": 1.4,
+    "Rpo": 2.0,
+    "Omega": 2.0
+  },
+  {
+    "Components": "2. Wet-side HVACR, boilers, furnaces, atmospheric tanks and bins, chillers, water heaters, heat exchangers, evaporators, air separators, manufacturing or process equipment, and other mechanical components constructed of high-deformability materials",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Components": "3. Air coolers (fin fans), air-cooled heat exchangers, condensing units. dry coolers, remote radiators, and other mechanical components elevated on integral structural steel or sheet metal supports",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.5,
+    "Omega": 1.75
+  },
+  {
+    "Components": "4. Engines, turbines, pumps. compressors, and pressure vessels not supported on skirts and not within the scope of Chapter 15",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Components": "5. Skirt-supported pressure vessels not within the scope of Chapter 15",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.5,
+    "Omega": 1.75
+  },
+  {
+    "Components": "6. Elevator and escalator components",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Components": "7. Generators batteries. inverters, motors, transformers and other electrical components constructed of high-deformability materials",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Components": "8. Motor control centers, panel boards, switch gear, instrumentation cabinets, and other components constructed of sheet metal framing",
+    "CAR_below": 1.4,
+    "CAR_above": 1.4,
+    "Rpo": 2.0,
+    "Omega": 2.0
+  },
+  {
+    "Components": "9. Communication equipment, computers, instrumentation and controls",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Components": "10. Roof-mounted stacks. cooling and electrical towers laterally braced below their center of mass",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.5,
+    "Omega": 1.75
+  },
+  {
+    "Components": "11. Roof-mounted stacks, cooling and electrical towers laterally braced above their center of mass",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Components": "12. Lighting fixtures",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Components": "13. Other mechanical or electrical components",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Components": "14. Manufacturing or process conveyors (nonpersonnel)",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.5,
+    "Omega": 1.75
+  },
+  {
+    "Components": "15. Vibration-Isolated Components and Systems: Components and systems isolated using neoprene elements and neoprene isolated floors with built-in or separate elastomeric snubbing devices or resilient perimeter stops",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.3,
+    "Omega": 1.75
+  },
+  {
+    "Components": "16. Vibration-Isolated Components and Systems: Spring-isolated components and systems and vibration-isolated floors closely restrained using built-in or separate clastomeric snubbing devices or resilient perimeter stops",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.3,
+    "Omega": 1.75
+  },
+  {
+    "Components": "17. Vibration-Isolated Components and Systems: Internally isolated components and systems",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.3,
+    "Omega": 1.75
+  },
+  {
+    "Components": "18. Vibration-Isolated Components and Systems: Suspended vibration-isolated equipment including in-line duct devices and suspended internally isolated components",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.3,
+    "Omega": 1.75
+  },
+  {
+    "Components": "19. Equipment Support Structures and Platforms: Support structures and platforms where Tp/Ta < 0.2, or Tp <= 0.06 s, per Section 13.6.4.6",
+    "CAR_below": null,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Components": "20. Equipment Support Structures and Platforms: Seismic force-resisting systems with R > 3",
+    "CAR_below": 1.4,
+    "CAR_above": 1.4,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Components": "21. Equipment Support Structures and Platforms: Seismic force-resisting systems with R <= 3",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.5,
+    "Omega": 1.75
+  },
+  {
+    "Components": "22. Equipment Support Structures and Platforms: Other systems",
+    "CAR_below": 2.2,
+    "CAR_above": 2.8,
+    "Rpo": 1.5,
+    "Omega": 1.5
+  },
+  {
+    "Components": "23. Distribution System Supports: Tension-only and cable bracing",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Components": "24. Distribution System Supports: Cold-formed steel rigid bracing",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Components": "25. Distribution System Supports: Hot-rolled steel bracing",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Components": "26. Distribution System Supports: Other rigid bracing",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Components": "27. Distribution System Supports: Lateral resistance provided by rods in flexure",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.5,
+    "Omega": 1.75
+  },
+  {
+    "Components": "28. Distribution System Supports: Vertical cantilever supports such as pipe tees and moment frames above and supported by a floor or roof",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.5,
+    "Omega": 1.75
+  },
+  {
+    "Components": "29. Distribution Systems: Piping in accordance with ASME B31 (2001. 2002. 2008, 2010). including in-line components with joints made by welding or brazing",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 3.0,
+    "Omega": 2.0
+  },
+  {
+    "Components": "30. Distribution Systems: Piping in accordance with ASME B31, including in-line components, constructed of high- or limited-deformability materials, with joints made by threading, bonding. compression couplings, or grooved couplings",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 2.0,
+    "Omega": 2.0
+  },
+  {
+    "Components": "31. Distribution Systems: Piping and tubing not in accordance with ASME B31, including in-line components, constructed of high-deformability materials, with joints made by welding or brazing",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 2.0,
+    "Omega": 2.0
+  },
+  {
+    "Components": "32. Distribution Systems: Piping and tubing not in accordance with ASME B31, including in-line components, constructed of high- or limited-deformability materials, with joints made by threading, bonding. compression couplings, or grooved couplings",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 2.0,
+    "Omega": 1.75
+  },
+  {
+    "Components": "33. Distribution Systems: Piping and tubing constructed of low-deformability materials, such as cast iron, glass, and nonductile plastics",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.5,
+    "Omega": 1.75
+  },
+  {
+    "Components": "34. Distribution Systems: Duct systems, including in-line components, constructed of high-deformability materials with joints made by welding or brazing",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 2.0,
+    "Omega": 2.0
+  },
+  {
+    "Components": "35. Distribution Systems: Duct systems, including in-line components, constructed of high- or limited-deformability materials, with joints made by means other than welding or brazing",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Components": "36. Distribution Systems: Duct systems, including in-line components, constructed of low-deformability materials such as cast iron, glass, and nonductile plastics",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.5,
+    "Omega": 1.75
+  },
+  {
+    "Components": "37. Distribution Systems: Electrical conduit, cable trays, and raceways",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Components": "38. Distribution Systems: Bus ducts",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Components": "39. Distribution Systems: Plumbing",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Components": "40. Distribution Systems: Pneumatic tube transport systems",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  }
+]

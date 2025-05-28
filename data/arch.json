@@ -1,0 +1,226 @@
+[
+  {
+    "Component": "1a. Interior nonstructural walls and partitions: Light frame <= 9 ft in height",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Component": "1b. Interior nonstructural walls and partitions: Light frame > 9 ft in height",
+    "CAR_below": 1.4,
+    "CAR_above": 1.4,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Component": "1c. Interior nonstructural walls and partitions: Reinforced masonry",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Component": "1d. Interior nonstructural walls and partitions: All other walls and partitions",
+    "CAR_below": 2.2,
+    "CAR_above": 2.8,
+    "Rpo": 1.5,
+    "Omega": 1.5
+  },
+  {
+    "Component": "2a. Cantilever elements (unbraced or braced to structural frame below its center of mass): Parapets and cantilever interior nonstructural walls",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.5,
+    "Omega": 1.75
+  },
+  {
+    "Component": "2b. Cantilever elements (unbraced or braced to structural frame below its center of mass): Chimneys where laterally braced or supported by the structural frame",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.5,
+    "Omega": 1.75
+  },
+  {
+    "Component": "3a. Cantilever elements (braced to structural frame above its center of mass): Parapets",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Component": "3b. Cantilever elements (braced to structural frame above its center of mass): Chimneys",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Component": "3c. Cantilever elements (braced to structural frame above its center of mass): Exterior nonstructural walls",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Component": "4a. Exterior nonstructural wall elements and connections: Wall element",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Component": "4b. Exterior nonstructural wall elements and connections: Body of wall panel connections",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Component": "4c. Exterior nonstructural wall elements and connections: Fasteners of the connecting system",
+    "CAR_below": 2.2,
+    "CAR_above": 2.8,
+    "Rpo": 1.5,
+    "Omega": 1.0
+  },
+  {
+    "Component": "5a. Veneer: Limited-deformability elements and attachments",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Component": "5b. Veneer: Low-deformability elements and attachments",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Component": "6a. Penthouses (except where framed by an extension of the building frame): Seismic force-resisting systems with R <= 6",
+    "CAR_below": null,
+    "CAR_above": 1.4,
+    "Rpo": 2.0,
+    "Omega": 2.0
+  },
+  {
+    "Component": "6b. Penthouses (except where framed by an extension of the building frame): Seismic force-resisting systems with 4 <= R < 6",
+    "CAR_below": null,
+    "CAR_above": 2.2,
+    "Rpo": 2.0,
+    "Omega": 1.75
+  },
+  {
+    "Component": "6c. Penthouses (except where framed by an extension of the building frame): Seismic force-resisting systems with R < 4",
+    "CAR_below": null,
+    "CAR_above": 2.8,
+    "Rpo": 2.0,
+    "Omega": 1.5
+  },
+  {
+    "Component": "6d. Penthouses (except where framed by an extension of the building frame): Other systems",
+    "CAR_below": null,
+    "CAR_above": 2.8,
+    "Rpo": 1.5,
+    "Omega": 1.5
+  },
+  {
+    "Component": "7. Ceilings: All",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Component": "8a. Cabinets: Permanent floor-supported storage cabinets more than 6 ft tall, including contents",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Component": "8b. Cabinets: Permanent floor-supported library shelving, book stacks, and bookshelves more than 6 ft tall, including contents",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Component": "9. Laboratory equipment",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Component": "10a. Access floors: Special access floors (designed in accordance with Section 13.5.7.2)",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 2.0,
+    "Omega": 2.0
+  },
+  {
+    "Component": "10b. Access floors: All other",
+    "CAR_below": 2.2,
+    "CAR_above": 2.8,
+    "Rpo": 1.5,
+    "Omega": 1.5
+  },
+  {
+    "Component": "11. Appendages and ornamentations",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.5,
+    "Omega": 1.75
+  },
+  {
+    "Component": "12. Signs and billboards",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.5,
+    "Omega": 1.75
+  },
+  {
+    "Component": "13. Other rigid components",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Component": "14a. Other flexible components: High-deformability elements and attachments",
+    "CAR_below": 1.4,
+    "CAR_above": 1.4,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Component": "14b. Other flexible components: Limited-deformability elements and attachments",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.5,
+    "Omega": 1.75
+  },
+  {
+    "Component": "14c. Other flexible components: Low-deformability materials and attachments",
+    "CAR_below": 2.2,
+    "CAR_above": 2.8,
+    "Rpo": 1.5,
+    "Omega": 1.5
+  },
+  {
+    "Component": "15. Egress stairways not part of the building seismic force-resisting system",
+    "CAR_below": 1.0,
+    "CAR_above": 1.0,
+    "Rpo": 1.5,
+    "Omega": 2.0
+  },
+  {
+    "Component": "16. Egress stairs and ramp fasteners and attachments",
+    "CAR_below": 1.8,
+    "CAR_above": 2.2,
+    "Rpo": 1.5,
+    "Omega": 1.75
+  }
+]

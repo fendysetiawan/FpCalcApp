@@ -1,0 +1,554 @@
+[
+  {
+    "SFRS": "A1. Bearing wall system: Special reinforced concrete shear walls",
+    "R": 5.0,
+    "Omega": 2.5,
+    "Cd": 5.0
+  },
+  {
+    "SFRS": "A2. Bearing wall system: Reinforced concrete ductile coupled walls",
+    "R": 8.0,
+    "Omega": 2.5,
+    "Cd": 8.0
+  },
+  {
+    "SFRS": "A3. Bearing wall system: Ordinary reinforced concrete shear walls",
+    "R": 4.0,
+    "Omega": 2.5,
+    "Cd": 4.0
+  },
+  {
+    "SFRS": "A4. Bearing wall system: Detailed plain concrete shear walls",
+    "R": 2.0,
+    "Omega": 2.5,
+    "Cd": 2.0
+  },
+  {
+    "SFRS": "A5. Bearing wall system: Ordinary plain concrete shear walls",
+    "R": 1.5,
+    "Omega": 2.5,
+    "Cd": 1.5
+  },
+  {
+    "SFRS": "A6. Bearing wall system: Intermediate precast shear walls",
+    "R": 4.0,
+    "Omega": 2.5,
+    "Cd": 4.0
+  },
+  {
+    "SFRS": "A7. Bearing wall system: Ordinary precast shear walls",
+    "R": 3.0,
+    "Omega": 2.5,
+    "Cd": 3.0
+  },
+  {
+    "SFRS": "A8. Bearing wall system: Special reinforced masonry shear walls",
+    "R": 5.0,
+    "Omega": 2.5,
+    "Cd": 3.5
+  },
+  {
+    "SFRS": "A9. Bearing wall system: Intermediate reinforced masonry shear walls",
+    "R": 3.5,
+    "Omega": 2.5,
+    "Cd": 2.25
+  },
+  {
+    "SFRS": "A10. Bearing wall system: Ordinary reinforced masonry shear walls",
+    "R": 2.0,
+    "Omega": 2.5,
+    "Cd": 1.75
+  },
+  {
+    "SFRS": "A11. Bearing wall system: Detailed plain masonry shear walls",
+    "R": 2.0,
+    "Omega": 2.5,
+    "Cd": 1.75
+  },
+  {
+    "SFRS": "A12. Bearing wall system: Ordinary plain masonry shear walls",
+    "R": 1.5,
+    "Omega": 2.5,
+    "Cd": 1.25
+  },
+  {
+    "SFRS": "A13. Bearing wall system: Prestressed masonry shear walls",
+    "R": 1.5,
+    "Omega": 2.5,
+    "Cd": 1.75
+  },
+  {
+    "SFRS": "A14. Bearing wall system: Ordinary reinforced AAC masonry shear walls",
+    "R": 2.0,
+    "Omega": 2.5,
+    "Cd": 2.0
+  },
+  {
+    "SFRS": "A15. Bearing wall system: Ordinary plain AAC masonry shear walls",
+    "R": 1.5,
+    "Omega": 2.5,
+    "Cd": 1.5
+  },
+  {
+    "SFRS": "A16. Bearing wall system: Light-frame (wood) walls sheathed with wood structural panels rated for shear resistance",
+    "R": 6.5,
+    "Omega": 3.0,
+    "Cd": 4.0
+  },
+  {
+    "SFRS": "A17. Bearing wall system: Light-frame (cold-formed steel) walls sheathed with wood structural panels rated for shear resistance or steel sheets",
+    "R": 6.5,
+    "Omega": 3.0,
+    "Cd": 4.0
+  },
+  {
+    "SFRS": "A18. Bearing wall system: Light-frame walls with shear panels of all other materials",
+    "R": 2.0,
+    "Omega": 2.5,
+    "Cd": 2.0
+  },
+  {
+    "SFRS": "A19. Bearing wall system: Light-frame (cold-formed steel) wall systems using flat strap bracing",
+    "R": 4.0,
+    "Omega": 2.0,
+    "Cd": 3.5
+  },
+  {
+    "SFRS": "A20. Bearing wall system: Cross-laminated timber shear walls",
+    "R": 3.0,
+    "Omega": 3.0,
+    "Cd": 3.0
+  },
+  {
+    "SFRS": "A21. Bearing wall system: Cross-laminated timber shear walls with shear resistance provided by high-aspect-ratio panels only",
+    "R": 4.0,
+    "Omega": 3.0,
+    "Cd": 4.0
+  },
+  {
+    "SFRS": "B1. Building frame system: Steel eccentrically braced frames",
+    "R": 8.0,
+    "Omega": 2.0,
+    "Cd": 4.0
+  },
+  {
+    "SFRS": "B2. Building frame system: Steel special concentrically braced frames",
+    "R": 6.0,
+    "Omega": 2.0,
+    "Cd": 5.0
+  },
+  {
+    "SFRS": "B3. Building frame system: Steel ordinary concentrically braced frames",
+    "R": 3.25,
+    "Omega": 2.0,
+    "Cd": 3.25
+  },
+  {
+    "SFRS": "B4. Building frame system: Special reinforced concrete shear walls",
+    "R": 6.0,
+    "Omega": 2.5,
+    "Cd": 5.0
+  },
+  {
+    "SFRS": "B5. Building frame system: Reinforced concrete ductile coupled walls",
+    "R": 8.0,
+    "Omega": 2.5,
+    "Cd": 8.0
+  },
+  {
+    "SFRS": "B6. Building frame system: Ordinary reinforced concrete shear walls",
+    "R": 5.0,
+    "Omega": 2.5,
+    "Cd": 4.5
+  },
+  {
+    "SFRS": "B7. Building frame system: Detailed plain concrete shear walls",
+    "R": 2.0,
+    "Omega": 2.5,
+    "Cd": 2.0
+  },
+  {
+    "SFRS": "B8. Building frame system: Ordinary plain concrete shear walls",
+    "R": 1.5,
+    "Omega": 2.5,
+    "Cd": 1.5
+  },
+  {
+    "SFRS": "B9. Building frame system: Intermediate precast shear walls",
+    "R": 5.0,
+    "Omega": 2.5,
+    "Cd": 4.5
+  },
+  {
+    "SFRS": "B10. Building frame system: Ordinary precast shear walls",
+    "R": 4.0,
+    "Omega": 2.5,
+    "Cd": 4.0
+  },
+  {
+    "SFRS": "B11. Building frame system: Steel and concrete composite eccentrically braced frames",
+    "R": 8.0,
+    "Omega": 2.5,
+    "Cd": 4.0
+  },
+  {
+    "SFRS": "B12. Building frame system: Steel and concrete composite special concentrically braced frames",
+    "R": 5.0,
+    "Omega": 2.0,
+    "Cd": 4.5
+  },
+  {
+    "SFRS": "B13. Building frame system: Steel and concrete composite ordinary braced frames",
+    "R": 3.0,
+    "Omega": 2.0,
+    "Cd": 3.0
+  },
+  {
+    "SFRS": "B14. Building frame system: Steel and concrete composite plate shear walls",
+    "R": 6.5,
+    "Omega": 2.5,
+    "Cd": 5.5
+  },
+  {
+    "SFRS": "B15. Building frame system: Steel and concrete composite special shear walls",
+    "R": 6.0,
+    "Omega": 2.5,
+    "Cd": 5.0
+  },
+  {
+    "SFRS": "B16. Building frame system: Steel and concrete composite ordinary shear walls",
+    "R": 5.0,
+    "Omega": 2.5,
+    "Cd": 4.5
+  },
+  {
+    "SFRS": "B17. Building frame system: Special reinforced masonry shear walls",
+    "R": 5.5,
+    "Omega": 2.5,
+    "Cd": 4.0
+  },
+  {
+    "SFRS": "B18. Building frame system: Intermediate reinforced masonry shear walls",
+    "R": 4.0,
+    "Omega": 2.5,
+    "Cd": 4.0
+  },
+  {
+    "SFRS": "B19. Building frame system: Ordinary reinforced masonry shear walls",
+    "R": 2.0,
+    "Omega": 2.5,
+    "Cd": 2.0
+  },
+  {
+    "SFRS": "B20. Building frame system: Detailed plain masonry shear walls",
+    "R": 2.0,
+    "Omega": 2.5,
+    "Cd": 2.0
+  },
+  {
+    "SFRS": "B21. Building frame system: Ordinary plain masonry shear walls",
+    "R": 1.5,
+    "Omega": 2.5,
+    "Cd": 1.25
+  },
+  {
+    "SFRS": "B22. Building frame system: Prestressed masonry shear walls",
+    "R": 1.5,
+    "Omega": 2.5,
+    "Cd": 1.75
+  },
+  {
+    "SFRS": "B23. Building frame system: Light-frame (wood) walls sheathed with wood structural panels rated for shear resistance",
+    "R": 7.0,
+    "Omega": 2.5,
+    "Cd": 4.5
+  },
+  {
+    "SFRS": "B24. Building frame system: Light-frame (cold-formed steel) walls sheathed with wood structural panels rated for shear resistance or steel sheets",
+    "R": 7.0,
+    "Omega": 2.5,
+    "Cd": 4.5
+  },
+  {
+    "SFRS": "B25. Building frame system: Light-frame walls with shear panels of all other materials",
+    "R": 2.5,
+    "Omega": 2.5,
+    "Cd": 2.5
+  },
+  {
+    "SFRS": "B26. Building frame system: Steel buckling-restrained braced frames",
+    "R": 8.0,
+    "Omega": 2.5,
+    "Cd": 5.0
+  },
+  {
+    "SFRS": "B27. Building frame system: Steel special plate shear walls",
+    "R": 7.0,
+    "Omega": 2.0,
+    "Cd": 6.0
+  },
+  {
+    "SFRS": "B28. Building frame system: Steel and concrete coupled composite plate shear walls",
+    "R": 8.0,
+    "Omega": 2.5,
+    "Cd": 5.5
+  },
+  {
+    "SFRS": "C1. Moment-resisting frame system: Steel special moment frames",
+    "R": 8.0,
+    "Omega": 3.0,
+    "Cd": 5.5
+  },
+  {
+    "SFRS": "C2. Moment-resisting frame system: Steel special truss moment frames",
+    "R": 7.0,
+    "Omega": 3.0,
+    "Cd": 5.5
+  },
+  {
+    "SFRS": "C3. Moment-resisting frame system: Steel intermediate moment frames",
+    "R": 4.5,
+    "Omega": 3.0,
+    "Cd": 4.0
+  },
+  {
+    "SFRS": "C4. Moment-resisting frame system: Steel ordinary moment frames",
+    "R": 3.5,
+    "Omega": 3.0,
+    "Cd": 3.0
+  },
+  {
+    "SFRS": "C5. Moment-resisting frame system: Special reinforced concrete moment frames",
+    "R": 8.0,
+    "Omega": 3.0,
+    "Cd": 5.5
+  },
+  {
+    "SFRS": "C6. Moment-resisting frame system: Intermediate reinforced concrete moment frames",
+    "R": 5.0,
+    "Omega": 3.0,
+    "Cd": 4.5
+  },
+  {
+    "SFRS": "C7. Moment-resisting frame system: Ordinary reinforced concrete moment frames",
+    "R": 3.0,
+    "Omega": 3.0,
+    "Cd": 2.5
+  },
+  {
+    "SFRS": "C8. Moment-resisting frame system: Steel and concrete composite special moment frames",
+    "R": 8.0,
+    "Omega": 3.0,
+    "Cd": 5.5
+  },
+  {
+    "SFRS": "C9. Moment-resisting frame system: Steel and concrete composite intermediate moment frames",
+    "R": 5.0,
+    "Omega": 3.0,
+    "Cd": 4.5
+  },
+  {
+    "SFRS": "C10. Moment-resisting frame system: Steel and concrete composite partially restrained moment frames",
+    "R": 6.0,
+    "Omega": 3.0,
+    "Cd": 5.5
+  },
+  {
+    "SFRS": "C11. Moment-resisting frame system: Steel and concrete composite ordinary moment frames",
+    "R": 3.0,
+    "Omega": 3.0,
+    "Cd": 2.5
+  },
+  {
+    "SFRS": "C12. Moment-resisting frame system: Cold-formed steel-special bolted moment frame\"",
+    "R": 3.5,
+    "Omega": 3.0,
+    "Cd": 3.5
+  },
+  {
+    "SFRS": "D1. Dual system with special moment frames: Steel eccentrically braced frames",
+    "R": 8.0,
+    "Omega": 2.5,
+    "Cd": 4.0
+  },
+  {
+    "SFRS": "D2. Dual system with special moment frames: Steel special concentrically braced frames",
+    "R": 7.0,
+    "Omega": 2.5,
+    "Cd": 5.5
+  },
+  {
+    "SFRS": "D3. Dual system with special moment frames: Special reinforced concrete shear walls",
+    "R": 7.0,
+    "Omega": 2.5,
+    "Cd": 5.5
+  },
+  {
+    "SFRS": "D4. Dual system with special moment frames: Reinforced concrete ductile coupled walls",
+    "R": 8.0,
+    "Omega": 2.5,
+    "Cd": 8.0
+  },
+  {
+    "SFRS": "D5. Dual system with special moment frames: Ordinary reinforced concrete shear walls",
+    "R": 6.0,
+    "Omega": 2.5,
+    "Cd": 5.0
+  },
+  {
+    "SFRS": "D6. Dual system with special moment frames: Steel and concrete composite eccentrically braced frames",
+    "R": 8.0,
+    "Omega": 2.5,
+    "Cd": 4.0
+  },
+  {
+    "SFRS": "D7. Dual system with special moment frames: Steel and concrete composite special concentrically braced frames",
+    "R": 6.0,
+    "Omega": 2.5,
+    "Cd": 5.0
+  },
+  {
+    "SFRS": "D8. Dual system with special moment frames: Steel and concrete composite plate shear walls",
+    "R": 7.5,
+    "Omega": 2.5,
+    "Cd": 6.0
+  },
+  {
+    "SFRS": "D9. Dual system with special moment frames: Steel and concrete composite special shear walls",
+    "R": 7.0,
+    "Omega": 2.5,
+    "Cd": 6.0
+  },
+  {
+    "SFRS": "D10. Dual system with special moment frames: Steel and concrete composite ordinary shear walls",
+    "R": 6.0,
+    "Omega": 2.5,
+    "Cd": 5.0
+  },
+  {
+    "SFRS": "D11. Dual system with special moment frames: Special reinforced masonry shear walls",
+    "R": 5.5,
+    "Omega": 3.0,
+    "Cd": 5.0
+  },
+  {
+    "SFRS": "D12. Dual system with special moment frames: Intermediate reinforced masonry shear walls",
+    "R": 4.0,
+    "Omega": 3.0,
+    "Cd": 3.5
+  },
+  {
+    "SFRS": "D13. Dual system with special moment frames: Steel buckling-restrained braced frames",
+    "R": 8.0,
+    "Omega": 2.5,
+    "Cd": 5.0
+  },
+  {
+    "SFRS": "D14. Dual system with special moment frames: Steel special plate shear walls",
+    "R": 8.0,
+    "Omega": 2.5,
+    "Cd": 6.5
+  },
+  {
+    "SFRS": "D15. Dual system with special moment frames: Steel and concrete coupled composite plate shear walls",
+    "R": 8.0,
+    "Omega": 2.5,
+    "Cd": 5.5
+  },
+  {
+    "SFRS": "E1. Dual system with intermediate moment frames: Steel special concentrically braced frames\"",
+    "R": 6.0,
+    "Omega": 2.5,
+    "Cd": 5.0
+  },
+  {
+    "SFRS": "E2. Dual system with intermediate moment frames: Special reinforced concrete shear walls",
+    "R": 6.5,
+    "Omega": 2.5,
+    "Cd": 5.0
+  },
+  {
+    "SFRS": "E3. Dual system with intermediate moment frames: Ordinary reinforced masonry shear walls",
+    "R": 3.0,
+    "Omega": 3.0,
+    "Cd": 2.5
+  },
+  {
+    "SFRS": "E4. Dual system with intermediate moment frames: Intermediate reinforced masonry shear walls",
+    "R": 3.5,
+    "Omega": 3.0,
+    "Cd": 3.0
+  },
+  {
+    "SFRS": "E5. Dual system with intermediate moment frames: Steel and concrete composite special concentrically braced frames",
+    "R": 5.5,
+    "Omega": 2.5,
+    "Cd": 4.5
+  },
+  {
+    "SFRS": "E6. Dual system with intermediate moment frames: Steel and concrete composite ordinary braced frames",
+    "R": 3.5,
+    "Omega": 2.5,
+    "Cd": 3.0
+  },
+  {
+    "SFRS": "E7. Dual system with intermediate moment frames: Steel and concrete composite ordinary shear walls",
+    "R": 5.0,
+    "Omega": 3.0,
+    "Cd": 4.5
+  },
+  {
+    "SFRS": "E8. Dual system with intermediate moment frames: Ordinary reinforced concrete shear walls",
+    "R": 5.5,
+    "Omega": 2.5,
+    "Cd": 4.5
+  },
+  {
+    "SFRS": "F. Shear wall-frame interactive system with ordinary reinforced concrete moment frames and ordinary reinforced concrete shear walls",
+    "R": 4.5,
+    "Omega": 2.5,
+    "Cd": 4.0
+  },
+  {
+    "SFRS": "G1. Cantilevered column system: Steel special cantilever column systems",
+    "R": 2.5,
+    "Omega": 2.5,
+    "Cd": 2.5
+  },
+  {
+    "SFRS": "G2. Cantilevered column system: Steel ordinary cantilever column systems",
+    "R": 1.25,
+    "Omega": 1.25,
+    "Cd": 1.25
+  },
+  {
+    "SFRS": "G3. Cantilevered column system: Special reinforced concrete moment frames",
+    "R": 2.5,
+    "Omega": 2.5,
+    "Cd": 2.5
+  },
+  {
+    "SFRS": "G4. Cantilevered column system: Intermediate reinforced concrete moment frames",
+    "R": 1.5,
+    "Omega": 1.5,
+    "Cd": 1.5
+  },
+  {
+    "SFRS": "G5. Cantilevered column system: Ordinary reinforced concrete moment frames",
+    "R": 1.0,
+    "Omega": 1.25,
+    "Cd": 1.0
+  },
+  {
+    "SFRS": "G6. Cantilevered column system: Timber frames",
+    "R": 1.25,
+    "Omega": 1.5,
+    "Cd": 1.5
+  },
+  {
+    "SFRS": "H. Steel systems not specifically detailed for seismic resistance, excluding cantilever column systems",
+    "R": 3.0,
+    "Omega": 3.0,
+    "Cd": 3.0
+  }
+]

@@ -1,0 +1,27 @@
+[
+	{
+		"Structure Type ": "Steel moment-resisting frame systems in which the frames resist 100% of the required seismic force and are not enclosed or adjoined by components that are more rigid and will prevent the frames from deflecting where subjected to seismic forces",
+		"Ct": 0.028,
+		"x": 0.8
+	},
+	{
+		"Structure Type ": "Concrete moment-resisting frame systems in which the frames resist 100% of the required seismic force and are not enclosed or adjoined by components that are more rigid and will prevent the frames from deflecting where subjected to seismic forces",
+		"Ct": 0.016,
+		"x": 0.9
+	},
+	{
+		"Structure Type ": "Steel eccentrically braced frames in accordance with Table 12.2-1, line B1 or D1",
+		"Ct": 0.03,
+		"x": 0.75
+	},
+	{
+		"Structure Type ": "Steel buckling-restrained braced frames",
+		"Ct": 0.03,
+		"x": 0.75
+	},
+	{
+		"Structure Type ": "All other structural systems",
+		"Ct": 0.02,
+		"x": 0.75
+	}
+]
