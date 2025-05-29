@@ -1,10 +1,15 @@
 import streamlit as st
+import io
 import requests
 import json
+from geopy.geocoders import Nominatim
+from streamlit_folium import st_folium
+import folium
 from fpcalc import (
     calculate_ta, calculate_fp_coeff, calculate_hf, calculate_rmu,
     get_component_factors, get_sfrs_factors
 )
+from report import generate_pdf_report
 
 # -------------------- Load Data --------------------
 def load_json(file):
@@ -27,7 +32,7 @@ st.header("🧩 :blue[Component Parameters]")
 component_category = st.radio("Component Category", ["Architectural", "Mechanical/Electrical"])
 component_data = arch_components if component_category == "Architectural" else mech_components
 component_list = [item.get("Component") or item.get("Components") for item in component_data]
-component_name = st.selectbox("Select Component", options=component_list, placeholder="Type to filter...")
+component_name = st.selectbox("Select Component", options=component_list, index=None, placeholder="Type to filter...")
 
 Ip = st.selectbox("Importance Factor (Ip)", [1.0, 1.5])
 Wp = st.number_input("Component Operating Weight (Wp) [kips]", min_value=0.0, format="%.2f")
@@ -45,13 +50,13 @@ location = "Supported Above Grade" if z > 0 else "Supported At or Below Grade"
 
 # ---------------- Structural System (R & Ω₀) ----------------
 st.subheader("Structural System Parameters")
-r_mode = st.radio("Define R and Ω₀", ["Use SFRS", "Specify manually"])
+r_mode = st.radio("Define R and Ω₀", ["Use SFRS", "Manual input"])
 
 if r_mode == "Use SFRS":
     sfrs_list = [s["SFRS"] for s in sfrs_data]
-    selected_sfrs = st.selectbox("SFRS", options=sfrs_list, placeholder="Type to filter...")
+    selected_sfrs = st.selectbox("SFRS", options=sfrs_list, index=None, placeholder="Type to filter...")
     R, Omega_0 = get_sfrs_factors(sfrs_data, selected_sfrs)
-    st.caption(f"**R = {R}, Ω₀ = {Omega_0}**")
+    if R is not None: st.info(f"R = {R}, Ω₀ = {Omega_0}")
 else:
     selected_sfrs = "Manual Input"
     R = st.number_input("Response Modification Coefficient (R)", min_value=1.0, value=8.0, step=0.25)
@@ -60,14 +65,14 @@ else:
 # -------------------- Period Input (Ta) --------------------
 st.subheader("Approximate Period (Tₐ)")
 
-ta_mode = st.radio("Tₐ Method", ["Calculate from structure type", "Manual Input", "Unknown"])
+ta_mode = st.radio("Tₐ Method", ["Calculate from structure type", "Manual input", "Unknown"])
 
 if ta_mode == "Calculate from structure type":
     structure_list = [p["Structure Type "] for p in period_data]
-    selected_structure_type = st.selectbox("Structure Type", options=structure_list, placeholder="Type to filter...")
+    selected_structure_type = st.selectbox("Structure Type", options=structure_list, index=None, placeholder="Type to filter...")
     Ta, Ct, x = calculate_ta(period_data, selected_structure_type, h)
-    st.info(f"Tₐ = {Ta:.3f} sec  |  Cₜ = {Ct}, x = {x}")
-elif ta_mode == "Manual Input":
+    if Ta is not None: st.info(f"Tₐ = {Ta:.3f} sec  |  Cₜ = {Ct}, x = {x}")
+elif ta_mode == "Manual input":
     Ta = st.number_input("Enter Tₐ [sec]", min_value=0.01)
     selected_structure_type = "Manual Input"
     Ct, x = "-", "-"
@@ -78,34 +83,93 @@ else:
 
 # ---------------------- SDS Input ----------------------
 st.header("♒︎ :blue[Seismic Parameters]")
-sds_mode = st.radio("SDS Input", ["Fetch from USGS", "Manual Entry"])
+sds_mode = st.radio("SDS Input", ["Fetch from USGS", "Manual input"])
 SDS = None
+lat, lon = None, None
+default_lat, default_lon = 37.80423914364421, -122.27615639197262
+default_address = "601 12th Street, Oakland 94607"
 
 if sds_mode == "Fetch from USGS":
-    default_lat, default_lon = 37.80423914364421, -122.27615639197262
-    col1, col2 = st.columns(2)
-    lat = col1.number_input("Latitude", value=default_lat, format="%.8f")
-    lon = col2.number_input("Longitude", value=default_lon, format="%.8f")
-    site_class = st.selectbox("Site Class", ["A", "B", "BC", "C", "CD", "D", "DE", "E", "Default"], index=8)
+    coord_mode = st.radio("Location Input Method",
+                ["Manual Lat/Lon", "Address"],
+                index=0)
 
-    if st.button("Fetch SDS"):
-        try:
-            url = (
-                f"https://earthquake.usgs.gov/ws/designmaps/asce7-22.json?"
-                f"latitude={lat}&longitude={lon}&riskCategory={risk_category}"
-                f"&siteClass={site_class}&title=FpCalc"
+    col_inputs, col_map = st.columns([1,1])
+
+    with col_inputs:
+        if coord_mode == "Manual Lat/Lon":
+            lat = st.number_input("Latitude", value=default_lat, format="%.8f")
+            lon = st.number_input("Longitude", value=default_lon, format="%.8f")
+
+        elif coord_mode == "Address":
+            @st.cache_data(show_spinner=False)
+            def geocode(addr: str):
+                if not addr:
+                    return None
+                geolocator = Nominatim(user_agent="FpCalc")
+                return geolocator.geocode(addr)
+            
+            address = st.text_input(
+                "Enter Address (e.g. 601 12th Street, Oakland 94607)",
+                value=default_address,
+                placeholder="601 12th Street, Oakland 94607"
             )
-            r = requests.get(url)
-            r.raise_for_status()
-            SDS = float(r.json()["response"]["data"]["sds"])
-            st.success(f"SDS = {SDS:.3f} g")
-        except Exception as e:
-            st.error(f"Error fetching SDS: {e}")
+            location = geocode(address.strip())
+            if location:
+                lat, lon = location.latitude, location.longitude
+                st.info(f"🔍 {location.address}\n Latitude: {lat:.6f}, Longitude: {lon:.6f}")
+            else:
+                if address:
+                    st.warning("Unable to geocode that address. Try refining it.")
+
+        site_class = st.selectbox("Site Class", ["A","B","BC","C","CD","D","DE","E","Default"], index=8)
+
+        # Fetch‐SDS button
+        if lat is not None and lon is not None and st.button("Fetch SDS"):
+            try:
+                url = (
+                    f"https://earthquake.usgs.gov/ws/designmaps/asce7-22.json"
+                    f"?latitude={lat}&longitude={lon}"
+                    f"&riskCategory={risk_category}"
+                    f"&siteClass={site_class}&title=FpCalc"
+                )
+                r = requests.get(url); r.raise_for_status()
+                SDS = float(r.json()["response"]["data"]["sds"])
+                st.info(f"SDS = {SDS:.3f} g")
+            except Exception as e:
+                st.error(f"Error fetching SDS: {e}")
+    
+    with col_map:
+        # Map display
+        if lat is not None and lon is not None:
+            m = folium.Map(location=[lat, lon], zoom_start=16)
+            tooltip = folium.Tooltip(f"<strong>Selected Site</strong><br>"
+                                     f"Lat: {lat:.6f}<br>Lon: {lon:.6f}", parse_html=True)
+            folium.Marker([lat, lon], tooltip=tooltip, icon=folium.Icon(icon="map-pin", prefix="fa")).add_to(m)
+            st_folium(m, width=350, height=300)
+
+    
+
 else:
+    # Manual SDS input unchanged
     SDS = st.number_input("SDS [g]", min_value=0.0, format="%.3f")
 
+
+# ------------ Check for required parameters ------------
+if component_name is None:
+    st.warning("Please select a component before proceeding.")
+    st.stop()
+
+if selected_sfrs is None:
+    st.warning("Please select a SFRS before proceeding.")
+    st.stop()
+
+if ta_mode != "Unknown" and Ta is None:
+    st.warning("Please select structural type or provide approximate period before proceeding.")
+    st.stop()
+
 if SDS is None:
-    st.warning("SDS value is required.")
+    st.warning("Please provide seismic parameters before proceeding.")
     st.stop()
 
 # -------------------- Calculations --------------------
@@ -121,7 +185,7 @@ st.write(f"### ✅ Fp coeff = **{Fp_coeff:.3f}**")
 if Wp > 0:
     st.write(f"### 🧮 Fp = **{Fp:.0f} lb** (with Wp = {Wp:.2f} kips)")
 else:
-    st.info("Enter a non-zero Wp to compute the seismic design force Fp.")
+    st.warning("Enter a non-zero Wp to compute the seismic design force Fp.")
 
 with st.expander("Calculation Details"):
     st.markdown("#### 🔢 Equations and Calculations")
@@ -163,7 +227,7 @@ $$
 
 - Height Amplification Factor:
 
-  location: _{location}
+  location: _{location}_
 
   $$
   \frac{{z}}{{h}} = \frac{{{z}}}{{{h}}} = {z_over_h}
@@ -201,15 +265,15 @@ $$
             f"Structure Type: _{selected_structure_type}_  \n\n"
             f"$$ T_a = C_t \\cdot h_n^x = {Ct} \\cdot {h:.1f}^{{{x}}} = {Ta:.3f} \\text{{ sec}} $$"
         )
-    elif ta_mode == "Specify manually":
+    elif ta_mode == "Manual input":
         ta_section = f"Manually entered:  \n\n$$ T_a = {Ta:.3f} \\text{{ sec}} $$"
     else:
         ta_section = f"Not specified" 
 
     # Hf case description and math
     z_over_h = z / h if h > 0 else 1
-    if ta_mode != "Specify manually":
-        Hf_expr = f"1 + {a1:.3f} · ({z_over_h:.3f}) + {a2:.3f} · ({z_over_h:.3f})^{10}"
+    if ta_mode != "Unknown":
+        Hf_expr = f"1 + {a1:.3f} · ({z_over_h:.3f}) + {a2:.3f} · ({z_over_h:.3f})^{{10}}"
         Hf_case = r"**Since $T_a$ is specified, use:**"
     else:
         Hf_expr = f"1 + 2.5 · ({z_over_h:.3f})"
@@ -228,7 +292,7 @@ $$
     st.markdown(calc_text
         .replace("{SDS}", f"{SDS:.3f}")
         .replace("{ta_section}", ta_section)
-        .replace("{location}", location)
+        .replace("{location}", str(location))
         .replace("{selected_component_type}", component_name)
         .replace("{selected_sfrs_type}", selected_sfrs)
         .replace("{selected_structure_type}", selected_structure_type)
@@ -254,5 +318,42 @@ $$
         .replace("{Wp}", f"{Wp:.0f}")
     )
 
+# Streamlit button and logic
+if st.button("📄 Generate PDF Report"):
+    buffer = io.BytesIO()
+
+    inputs = {
+        "Component Type": component_name,
+        "Component Category": component_category,
+        "Importance Factor (Ip)": Ip,
+        "Weight (Wp)": Wp,
+        "SDS": SDS,
+        "R": R,
+        "Omega_0": Omega_0,
+        "Ie": Ie,
+        "z (ft)": z,
+        "h (ft)": h,
+        "Structure Type": selected_structure_type,
+        "Risk Category": risk_category,
+        "Site Class": site_class if sds_mode == "Fetch from USGS" else "Manual",
+        "Tₐ (sec)": f"{Ta:.3f}" if Ta else "Not specified"
+    }
+
+    results = {
+        "Hf": f"{Hf:.3f}",
+        "Rμ": f"{Rmu:.3f}",
+        "CAR": f"{CAR}",
+        "Rpo": f"{Rpo}",
+        "Fp Coefficient": f"{Fp_coeff:.3f}",
+        "Fp": f"{Fp:.0f} lb" if Wp > 0 else "N/A",
+    }
+
+    generate_pdf_report(buffer, inputs, results)
+    st.download_button(
+        label="📥 Download Report",
+        data=buffer,
+        file_name="FpCalc_Report.pdf",
+        mime="application/pdf"
+    )
 
 st.caption("FpCalc | ASCE/SEI 7-22 Chapter 13 © Degenkolb Engineers")
