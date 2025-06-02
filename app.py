@@ -5,11 +5,18 @@ import json
 from geopy.geocoders import Nominatim
 from streamlit_folium import st_folium
 import folium
+from auth import get_users_from_secrets, login_ui
 from fpcalc import (
     calculate_ta, calculate_fp_coeff, calculate_hf, calculate_rmu,
     get_component_factors, get_sfrs_factors
 )
 from report import generate_pdf_report
+
+st.set_page_config(page_title="FpCalc", layout="centered")
+
+# ---------------- Authenticate User ----------------
+users = get_users_from_secrets()
+login_ui(users)
 
 # -------------------- Load Data --------------------
 def load_json(file):
@@ -22,7 +29,6 @@ sfrs_data = load_json("data/building.json")
 period_data = load_json("data/period.json")
 
 # -------------------- UI Setup --------------------
-st.set_page_config(page_title="FpCalc", layout="centered")
 st.title("📐 FpCalc: Seismic Design Force (Fp) Calculator")
 st.markdown("Based on **ASCE/SEI 7-22**, Chapter 13")
 
