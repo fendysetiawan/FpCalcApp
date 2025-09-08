@@ -12,17 +12,9 @@ from fpcalc import (
 
 st.set_page_config(page_title="FpCalc", layout="wide")
 
-
 # ---------------- Authenticate User ----------------
 users = get_users_from_secrets()
 login_ui(users)
-
-# Mobile detection function
-def is_mobile():
-    """Detect if the user is on a mobile device based on screen width"""
-    # Streamlit doesn't have direct access to screen width, so we'll use a simple heuristic
-    # This is a basic implementation - in practice, you might want to use JavaScript
-    return False  # For now, we'll assume desktop and let CSS handle responsiveness
 
 # -------------------- Load Data --------------------
 def load_json(file):
@@ -38,39 +30,9 @@ period_data = load_json("data/period.json")
 st.title("📐 FpCalc: Seismic Design Force (Fp) Calculator")
 st.markdown("Based on **ASCE/SEI 7-22**, Chapter 13")
 
-# Initialize session state for layout preference
-if 'layout_mode' not in st.session_state:
-    st.session_state.layout_mode = 'desktop'
-
-# Add JavaScript for layout class management
-st.markdown(f"""
-<script>
-// Add layout class to body based on user preference
-document.body.classList.add('{st.session_state.layout_mode}-layout');
-</script>
-""", unsafe_allow_html=True)
-
-# Layout toggle
-col_toggle, col_spacer = st.columns([1, 4])
-with col_toggle:
-    layout_mode = st.radio(
-        "Layout Mode",
-        ["Desktop", "Mobile"],
-        index=0 if st.session_state.layout_mode == 'desktop' else 1,
-        horizontal=True,
-        label_visibility="collapsed"
-    )
-    st.session_state.layout_mode = layout_mode.lower()
-
-# Create responsive layout based on user preference
-if st.session_state.layout_mode == 'mobile':
-    # Single column layout for mobile - all content in one column
-    col1, col2, col3 = st.columns([1, 1, 1])  # Use equal columns but only use col1
-    use_mobile_layout = True
-else:
-    # Five column layout for desktop: content | separator | content | separator | content
-    col1, sep1, col2, sep2, col3 = st.columns([3, 0.5, 3, 0.5, 3])
-    use_mobile_layout = False
+# Always use desktop layout
+col1, sep1, col2, sep2, col3 = st.columns([3, 0.5, 3, 0.5, 3])
+use_mobile_layout = False
 
 # -------------------- LEFT COLUMN: Component & Building Parameters --------------------
 with col1:
