@@ -4,19 +4,19 @@ import json
 from geopy.geocoders import Nominatim
 from streamlit_folium import st_folium
 import folium
-from auth import get_users_from_secrets, login_ui
+from auth import login_ui, logout_ui
 from fpcalc import (
     calculate_ta, calculate_fp_coeff, calculate_hf, calculate_rmu,
     get_component_factors, get_sfrs_factors
 )
 
-st.set_page_config(page_title="FpCalc", layout="wide")
+st.set_page_config(page_title="FpCalc", layout="wide", initial_sidebar_state="collapsed")
 
-# ---------------- Authenticate User ----------------
-users = get_users_from_secrets()
-login_ui(users)
+# Authentication
+login_ui()
+logout_ui()
 
-# -------------------- Load Data --------------------
+# Load Data
 def load_json(file):
     with open(file, "r") as f:
         return json.load(f)
@@ -26,18 +26,17 @@ mech_components = load_json("data/mech.json")
 sfrs_data = load_json("data/building.json")
 period_data = load_json("data/period.json")
 
-# -------------------- UI Setup --------------------
-st.title("📐 FpCalc: Seismic Design Force (Fp) Calculator")
+# UI Setup
+st.markdown("## 📐 FpCalc: Seismic Design Force (Fp) Calculator")
 st.markdown("Based on **ASCE/SEI 7-22**, Chapter 13")
 
-# Always use desktop layout
-col1, sep1, col2, sep2, col3 = st.columns([3, 0.5, 3, 0.5, 3])
-use_mobile_layout = False
+# Desktop layout
+col1, sep1, col2, sep2, col3 = st.columns([3, 0.15, 3, 0.15, 4])
 
-# -------------------- LEFT COLUMN: Component & Building Parameters --------------------
+# LEFT COLUMN: Component & Building Parameters
 with col1:
-    # -------------------- Component Information --------------------
-    st.header("🧩 :blue[Component Parameters]")
+    # Component Information
+    st.markdown("### 🧩 :blue[Component Parameters]")
 
     component_category = st.radio("Component Category", ["Architectural", "Mechanical/Electrical"])
     component_data = arch_components if component_category == "Architectural" else mech_components
@@ -50,8 +49,8 @@ with col1:
     with col_wp:
         Wp = st.number_input("Component Operating Weight (Wp) [lb]", min_value=0.0, format="%.2f")
 
-    # -------------------- Building Parameters --------------------
-    st.header("🏢 :blue[Building Parameters]")
+    # Building Parameters
+    st.markdown("### 🏢 :blue[Building Parameters]")
 
     risk_category = st.selectbox("Risk Category", ["I", "II", "III", "IV"], index=1)
     Ie = {"I": 1.0, "II": 1.0, "III": 1.25, "IV": 1.5}[risk_category]
@@ -64,8 +63,8 @@ with col1:
         h = st.number_input("Roof Height (h) [ft]", min_value=1.0)
     location = "Supported Above Grade" if z > 0 else "Supported At or Below Grade"
 
-    # ---------------- Structural System (R & Ω₀) ----------------
-    st.subheader("Structural System Parameters (R & Ω₀)")
+    # Structural System (R & Ω₀)
+    st.markdown("#### Structural System Parameters (R & Ω₀)")
     
     col_mode, col_input = st.columns([1, 2])
     with col_mode:
@@ -82,8 +81,8 @@ with col1:
             R = st.number_input("Response Modification Coefficient (R)", min_value=1.0, value=8.0, step=0.25)
             Omega_0 = st.number_input("Overstrength Factor (Ω₀)", min_value=1.0, value=3.0, step=0.25)
 
-    # -------------------- Period Input (Ta) --------------------
-    st.subheader("Approximate Period (Tₐ)")
+    # Period Input (Ta)
+    st.markdown("#### Approximate Period (Tₐ)")
 
     col_mode, col_input = st.columns([1, 2])
     with col_mode:
@@ -104,13 +103,10 @@ with col1:
             selected_structure_type = "Unknown"
             Ct, x = "-", "-"
 
-# -------------------- MIDDLE COLUMN: Seismic Parameters --------------------
-# Determine which column to use based on layout
-seismic_col = col2 if not use_mobile_layout else col1
-
-with seismic_col:
-    # ---------------------- SDS Input ----------------------
-    st.header("♒︎ :blue[Seismic Parameters]")
+# MIDDLE COLUMN: Seismic Parameters
+with col2:
+    # SDS Input
+    st.markdown("### ♒︎ :blue[Seismic Parameters]")
     sds_mode = st.radio("SDS Input", ["Fetch from USGS", "Manual input"])
 
     # Initialize session state for SDS caching
@@ -144,9 +140,10 @@ with seismic_col:
         coord_mode = st.radio("Location Input Method",
                     ["Manual Lat/Lon", "Address"],
                     index=0)
+                    
+        col_inputs, col_map = st.columns([1,1.5])
 
-        if use_mobile_layout:
-            # Mobile layout - no sub-columns
+        with col_inputs:
             if coord_mode == "Manual Lat/Lon":
                 lat = st.number_input("Latitude", value=default_lat, format="%.8f")
                 lon = st.number_input("Longitude", value=default_lon, format="%.8f")
@@ -196,88 +193,23 @@ with seismic_col:
                 SDS = st.session_state.sds_value
                 st.info(f"SDS = {SDS:.3f} g")
         
-            # Map display for mobile
+        with col_map:
+            # Map display
             if lat is not None and lon is not None:
                 m = folium.Map(location=[lat, lon], zoom_start=16)
                 tooltip = folium.Tooltip(f"<strong>Selected Site</strong><br>"
                                          f"Lat: {lat:.6f}<br>Lon: {lon:.6f}", parse_html=True)
                 folium.Marker([lat, lon], tooltip=tooltip, icon=folium.Icon(icon="map-pin", prefix="fa")).add_to(m)
-                st_folium(m, width=400, height=300)
-
-        else:
-            # Desktop layout - with sub-columns
-            col_inputs, col_map = st.columns([1,1])
-
-            with col_inputs:
-                if coord_mode == "Manual Lat/Lon":
-                    lat = st.number_input("Latitude", value=default_lat, format="%.8f")
-                    lon = st.number_input("Longitude", value=default_lon, format="%.8f")
-
-                elif coord_mode == "Address":
-                    @st.cache_data(show_spinner=False)
-                    def geocode(addr: str):
-                        if not addr:
-                            return None
-                        geolocator = Nominatim(user_agent="FpCalc")
-                        return geolocator.geocode(addr)
-                    
-                    address = st.text_input(
-                        "Enter Address (e.g. 601 12th Street, Oakland 94607)",
-                        value=default_address,
-                        placeholder="601 12th Street, Oakland 94607"
-                    )
-                    location = geocode(address.strip())
-                    if location:
-                        lat, lon = location.latitude, location.longitude
-                        st.info(f"🔍 {location.address}\n Latitude: {lat:.6f}, Longitude: {lon:.6f}")
-                    else:
-                        if address:
-                            st.warning("Unable to geocode that address. Try refining it.")
-
-                site_class = st.selectbox("Site Class", ["A","B","BC","C","CD","D","DE","E","Default"], index=8)
-
-                # Check if we have cached SDS for current parameters
-                current_params = (lat, lon, risk_category, site_class)
-                has_cached_sds = (st.session_state.sds_value is not None and 
-                                 st.session_state.sds_params == current_params and
-                                 lat is not None and lon is not None)
-
-                # Fetch SDS buttons
-                if lat is not None and lon is not None and st.button("🔄 Fetch SDS"):
-                    try:
-                        SDS = fetch_sds_cached(lat, lon, risk_category, site_class)
-                        st.session_state.sds_value = SDS
-                        st.session_state.sds_location = f"{lat:.6f}, {lon:.6f}"
-                        st.session_state.sds_params = current_params
-                        st.info(f"SDS = {SDS:.3f} g")
-                    except Exception as e:
-                        st.error(f"Error fetching SDS: {e}")
-
-                # Show cached SDS if available
-                elif has_cached_sds:
-                    SDS = st.session_state.sds_value
-                    st.info(f"SDS = {SDS:.3f} g")
-            
-            with col_map:
-                # Map display
-                if lat is not None and lon is not None:
-                    m = folium.Map(location=[lat, lon], zoom_start=16)
-                    tooltip = folium.Tooltip(f"<strong>Selected Site</strong><br>"
-                                             f"Lat: {lat:.6f}<br>Lon: {lon:.6f}", parse_html=True)
-                    folium.Marker([lat, lon], tooltip=tooltip, icon=folium.Icon(icon="map-pin", prefix="fa")).add_to(m)
-                    st_folium(m, width=350, height=300)
+                st_folium(m, width=350, height=300)
 
     else:
         # Manual SDS input unchanged
         SDS = st.number_input("SDS [g]", min_value=0.0, format="%.3f")
 
 
-# -------------------- RIGHT COLUMN: Results & Calculation Details --------------------
-# Determine which column to use based on layout
-results_col = col3 if not use_mobile_layout else col1
-
-with results_col:
-    # ------------ Check for required parameters ------------
+# RIGHT COLUMN: Results & Calculation Details
+with col3:
+    # Check for required parameters
     if component_name is None:
         st.warning("Please select a component before proceeding.")
         st.stop()
@@ -294,22 +226,22 @@ with results_col:
         st.warning("Please provide seismic parameters before proceeding.")
         st.stop()
 
-    # -------------------- Calculations --------------------
+    # Calculations
     CAR, Rpo = get_component_factors(component_data, component_name, location)
     Hf, a1, a2 = calculate_hf(z, h, Ta)
     Rmu = calculate_rmu(R, Ie, Omega_0)
     Fp_coeff, Fp_calc_coeff, Fp_min_coeff, Fp_max_coeff = calculate_fp_coeff(SDS, Ip, Wp, Hf, Rmu, CAR, Rpo)
     Fp = Fp_coeff * Wp
 
-    # ------------------  Display Results ------------------ 
-    st.header("✅ :blue[Results]")
-    st.write(f"#### Fp coeff = **{Fp_coeff:.3f}**")
+    # Display Results 
+    st.markdown("### ✅ :blue[Results]")
+    st.markdown(f"#### Fp coeff = **{Fp_coeff:.3f}**")
     if Wp > 0:
-        st.write(f"#### Fp = **{Fp:.0f} lb** (with Wp = {Wp:.0f} lb)")
+        st.markdown(f"#### Fp = **{Fp:.0f} lb** (with Wp = {Wp:.0f} lb)")
     else:
         st.warning("Enter a non-zero Wp to compute the seismic design force Fp.")
 
-    # ------------------  Calculation Details ------------------
+    # Calculation Details
     with st.expander("🔢 Calculation Details", expanded=False):
         calc_text = r"""
 **Base Equation (Eqn. 13.3-1):**
@@ -413,21 +345,21 @@ $$
         if ta_mode == "Given structure type":
             ta_section = (
                 f"Structure Type: _{selected_structure_type}_ (Eqn. 12.8-8)\n\n\t"
-                f"$$ \small T_a = C_t \\cdot h_n^x = {Ct} \\cdot {h:.1f}^{{{x}}} = {Ta:.3f} \\text{{ sec}} $$"
+                f"$$ \\small T_a = C_t \\cdot h_n^x = {Ct} \\cdot {h:.1f}^{{{x}}} = {Ta:.3f} \\text{{ sec}} $$"
             )
         elif ta_mode == "Manual input":
-            ta_section = f"Manually entered:  $$ \small T_a = {Ta:.3f} \\text{{ sec}} $$"
+            ta_section = f"Manually entered:  $$ \\small T_a = {Ta:.3f} \\text{{ sec}} $$"
         else:
             ta_section = ""
 
         # Hf case description and math
         z_over_h = z / h if h > 0 else 1
         if ta_mode != "Unknown":
-            Hf_expr = "1 + a_1 \cdot \left( \\frac{z }{h } \\right) + a_2 \cdot \left( \\frac{z }{h } \\right)^{10}"
+            Hf_expr = "1 + a_1 \\cdot \\left( \\frac{z }{h } \\right) + a_2 \\cdot \\left( \\frac{z }{h } \\right)^{10}"
             Hf_num_expr = f"1 + {a1:.3f} · ({z_over_h:.3f}) + {a2:.3f} · ({z_over_h:.3f})^{{10}}"
             Hf_case = r"Since $T_a$ is specified, use Eqn. 13.3-4"
         else:
-            Hf_expr = "1 + 2.5 \\cdot \left( \\frac{z }{h } \\right)"
+            Hf_expr = "1 + 2.5 \\cdot \\left( \\frac{z }{h } \\right)"
             Hf_num_expr = f"1 + 2.5 · ({z_over_h:.3f})"
             Hf_case = r"Since $T_a$ is not specified, use Eqn. 13.3-5"
         
