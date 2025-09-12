@@ -31,7 +31,7 @@ st.markdown("## 📐 FpCalc: Seismic Design Force (Fp) Calculator")
 st.markdown("Based on **ASCE/SEI 7-22**, Chapter 13")
 
 # Desktop layout
-col1, sep1, col2, sep2, col3 = st.columns([3, 0.15, 3, 0.15, 4])
+col1, sep1, col2, sep2, col3 = st.columns([3, 0.25, 3, 0.25, 3.5])
 
 # LEFT COLUMN: Component & Building Parameters
 with col1:
