@@ -12,6 +12,26 @@ from fpcalc import (
 
 st.set_page_config(page_title="FpCalc", layout="wide", initial_sidebar_state="collapsed")
 
+# Custom CSS for calculation details spacing
+st.markdown("""
+<style>
+    /* Reduce line spacing in calculation details */
+    .stExpander .stMarkdown p {
+        margin-bottom: 0.5rem !important;
+        line-height: 1.5 !important;
+    }
+    
+    .stExpander .stMarkdown {
+        margin-bottom: 0.5rem !important;
+    }
+    
+    /* Reduce spacing in expander content */
+    .stExpander .element-container {
+        margin-bottom: 0.5rem !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # Authentication
 login_ui()
 logout_ui()
@@ -31,7 +51,7 @@ st.markdown("## 📐 FpCalc: Seismic Design Force (Fp) Calculator")
 st.markdown("Based on **ASCE/SEI 7-22**, Chapter 13")
 
 # Desktop layout
-col1, sep1, col2, sep2, col3 = st.columns([3, 0.25, 3, 0.25, 3.5])
+col1, sep1, col2, sep2, col3 = st.columns([3, 0.3, 3, 0.3, 3.5])
 
 # LEFT COLUMN: Component & Building Parameters
 with col1:
@@ -48,6 +68,10 @@ with col1:
         Ip = st.selectbox("Importance Factor (Ip)", [1.0, 1.5])
     with col_wp:
         Wp = st.number_input("Component Operating Weight (Wp) [lb]", min_value=0.0, format="%.2f")
+
+    # Add space between sections
+    st.markdown("")
+    st.markdown("")
 
     # Building Parameters
     st.markdown("### 🏢 :blue[Building Parameters]")
@@ -86,10 +110,10 @@ with col1:
 
     col_mode, col_input = st.columns([1, 2])
     with col_mode:
-        ta_mode = st.radio("Tₐ Method", ["Given structure type", "Manual input", "Unknown"])
+        ta_mode = st.radio("Tₐ Method", ["Calculate from structure type", "Manual input", "Unknown"])
 
     with col_input:
-        if ta_mode == "Given structure type":
+        if ta_mode == "Calculate from structure type":
             structure_list = [p["Structure Type "] for p in period_data] 
             selected_structure_type = st.selectbox("Structure Type", options=structure_list, index=None, placeholder="Type to filter...")
             Ta, Ct, x = calculate_ta(period_data, selected_structure_type, h)
@@ -244,22 +268,20 @@ with col3:
     # Calculation Details
     with st.expander("🔢 Calculation Details", expanded=False):
         calc_text = r"""
-**Base Equation (Eqn. 13.3-1):**
+**BASE EQUATION (EQN. 13.3-1):**
 
 $$
 \small
 F_p = 0.4 \cdot S_{DS} \cdot I_p \cdot W_p \cdot \left[ \frac{H_f}{R_{\mu}} \right] \cdot \left[ \frac{C_{AR}}{R_{po}} \right]
 $$
 
-**Parameters:**
+**PARAMETERS:**
 
-- Approximate Fundamental Period (Tₐ):
-
-  Structure Type: _{selected_structure_type}_
+- **_Approximate Fundamental Period (Tₐ)_**:
 
   {ta_section}
 
-- Component Amplification Factor (Table 13.5-1 or 13.6-1):
+- **_Component Amplification Factor (Table 13.5-1 or 13.6-1)_**:
 
   Component Type: _{selected_component_type}_
 
@@ -268,7 +290,7 @@ $$
   C_{AR} = {CAR}, \quad R_{po} = {Rpo}
   $$
 
-- Structure Ductility Factor (Table 12.2-1 and Eqn. 13.3-6):
+- **_Structure Ductility Factor (Table 12.2-1 and Eqn. 13.3-6)_**:
 
   SFRS Type: _{selected_sfrs_type}_
   
@@ -282,7 +304,7 @@ $$
   R_{\mu} = \sqrt{ \frac{1.1 \cdot R}{I_e \cdot \Omega_0} } = \sqrt{ \frac{{1.1} \cdot {R}}{{Ie} \cdot {Omega_0}} } = {Rmu}
   $$
 
-- Height Amplification Factor:
+- **_Height Amplification Factor_**:
 
   Location: _{location}_
 
@@ -305,7 +327,7 @@ $$
   \end{aligned}
   $$
 
-**Fp Coefficient:**
+**FP COEFFICIENT:**
 
 $$
 \small
@@ -317,18 +339,12 @@ $$
 
 $$
 \small
-\begin{aligned}
-F_{p,min,coeff} &= 0.3 \cdot S_{DS} \cdot I_p \scriptsize\text{ (Eqn. 13.3-3)} \\
-&= 0.3 \cdot {SDS} \cdot {Ip} = {Fp_min_coeff}
-\end{aligned}
+F_{p,min,coeff} = 0.3 \cdot S_{DS} \cdot I_p = 0.3 \cdot {SDS} \cdot {Ip} = {Fp_min_coeff} \scriptsize\text{ (Eqn. 13.3-3)} 
 $$
 
 $$
 \small
-\begin{aligned}
-F_{p,max,coeff} &= 1.6 \cdot S_{DS} \cdot I_p \scriptsize\text{ (Eqn. 13.3-2)} \\
-&= 1.6 \cdot {SDS} \cdot {Ip} = {Fp_max_coeff}
-\end{aligned}
+F_{p,max,coeff} = 1.6 \cdot S_{DS} \cdot I_p = 1.6 \cdot {SDS} \cdot {Ip} = {Fp_max_coeff} \scriptsize\text{ (Eqn. 13.3-2)} 
 $$
 
 $$
@@ -342,7 +358,7 @@ $$
 {Fp_force_case}
 """
 
-        if ta_mode == "Given structure type":
+        if ta_mode == "Calculate from structure type":
             ta_section = (
                 f"Structure Type: _{selected_structure_type}_ (Eqn. 12.8-8)\n\n\t"
                 f"$$ \\small T_a = C_t \\cdot h_n^x = {Ct} \\cdot {h:.1f}^{{{x}}} = {Ta:.3f} \\text{{ sec}} $$"
@@ -371,7 +387,7 @@ $$
                 f"$$"
             )
         else:
-            Fp_force_case = "**Fp Force:**\n\n_(Not shown. Enter a non-zero Wp to compute Fp)_"
+            Fp_force_case = "**FP FORCE:**\n\n_(Not shown. Enter a non-zero Wp to compute Fp)_"
 
         st.markdown(calc_text
             .replace("{SDS}", f"{SDS:.3f}")
