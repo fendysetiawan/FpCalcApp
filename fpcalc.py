@@ -17,7 +17,7 @@ def get_component_factors(component_data, component_name, location):
     key = "Component" if "Component" in component_data[0] else "Components"
     for row in component_data:
         if row[key].strip().lower() == component_name.strip().lower():
-            car = row["CAR_above"] if location == "Supported Above Grade" else row["CAR_below"]
+            car = row["CAR_below"] if location == "Supported At or Below Grade" else row["CAR_above"]
             rpo = row["Rpo"]
             return car or 1.0, rpo or 1.5
     return 1.0, 1.0  # Default fallback

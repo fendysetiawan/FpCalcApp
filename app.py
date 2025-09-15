@@ -62,10 +62,17 @@ with col1:
     component_data = arch_components if component_category == "Architectural" else mech_components
     component_list = [item.get("Component") or item.get("Components") for item in component_data]
     component_name = st.selectbox("Select Component", options=component_list, index=None, placeholder="Type to filter...")
+    
+    # Display CAR and Rpo values if component is selected
+    if component_name is not None:
+        # For now, show both above and below grade values
+        CAR_above, Rpo = get_component_factors(component_data, component_name, "Supported Above Grade")
+        CAR_below, _ = get_component_factors(component_data, component_name, "Supported At or Below Grade")
+        st.caption(f"Above Grade CAR = **{CAR_above}** |  Below Grade CAR = **{CAR_below}** | Rpo = **{Rpo}**")
 
     col_ip, col_wp = st.columns(2)
     with col_ip:
-        Ip = st.selectbox("Importance Factor (Ip)", [1.0, 1.5])
+        Ip = st.selectbox("Component Importance Factor (Ip)", [1.0, 1.5])
     with col_wp:
         Wp = st.number_input("Component Operating Weight (Wp) [lb]", min_value=0.0, format="%.2f")
 
@@ -78,14 +85,14 @@ with col1:
 
     risk_category = st.selectbox("Risk Category", ["I", "II", "III", "IV"], index=1)
     Ie = {"I": 1.0, "II": 1.0, "III": 1.25, "IV": 1.5}[risk_category]
-    st.caption(f"Assigned Importance Factor (Ie): **{Ie}**")
+    st.caption(f"Building Importance Factor (Ie): **{Ie}**")
 
     col_z, col_h = st.columns(2)
     with col_z:
         z = st.number_input("Attachment Height (z) [ft]", min_value=0.0)
     with col_h:
         h = st.number_input("Roof Height (h) [ft]", min_value=1.0)
-    location = "Supported Above Grade" if z > 0 else "Supported At or Below Grade"
+    component_location = "Supported Above Grade" if z > 0 else "Supported At or Below Grade"
 
     # Structural System (R & Ω₀)
     st.markdown("#### Structural System Parameters (R & Ω₀)")
@@ -99,7 +106,7 @@ with col1:
             sfrs_list = [s["SFRS"] for s in sfrs_data]
             selected_sfrs = st.selectbox("SFRS", options=sfrs_list, index=None, placeholder="Type to filter...")
             R, Omega_0 = get_sfrs_factors(sfrs_data, selected_sfrs)
-            if R is not None: st.info(f"R = {R}, Ω₀ = {Omega_0}")
+            if R is not None: st.caption(f"R = {R}, Ω₀ = {Omega_0}")
         else:
             selected_sfrs = "Manual Input"
             R = st.number_input("Response Modification Coefficient (R)", min_value=1.0, value=8.0, step=0.25)
@@ -117,7 +124,7 @@ with col1:
             structure_list = [p["Structure Type "] for p in period_data] 
             selected_structure_type = st.selectbox("Structure Type", options=structure_list, index=None, placeholder="Type to filter...")
             Ta, Ct, x = calculate_ta(period_data, selected_structure_type, h)
-            if Ta is not None: st.info(f"Tₐ = {Ta:.3f} sec  |  Cₜ = {Ct}, x = {x}")
+            if Ta is not None: st.caption(f"Tₐ = {Ta:.3f} sec  |  Cₜ = {Ct}, x = {x}")
         elif ta_mode == "Manual input":
             Ta = st.number_input("Enter Tₐ [sec]", min_value=0.01, value=1.00, step=0.10)
             selected_structure_type = "Manual Input"
@@ -126,6 +133,10 @@ with col1:
             Ta = None
             selected_structure_type = "Unknown"
             Ct, x = "-", "-"
+
+    # Add space between sections
+    st.markdown("")
+    st.markdown("")
 
 # MIDDLE COLUMN: Seismic Parameters
 with col2:
@@ -188,7 +199,7 @@ with col2:
                 location = geocode(address.strip())
                 if location:
                     lat, lon = location.latitude, location.longitude
-                    st.info(f"🔍 {location.address}\n Latitude: {lat:.6f}, Longitude: {lon:.6f}")
+                    st.caption(f"🔍 {location.address}\n Latitude: {lat:.6f}, Longitude: {lon:.6f}")
                 else:
                     if address:
                         st.warning("Unable to geocode that address. Try refining it.")
@@ -208,14 +219,14 @@ with col2:
                     st.session_state.sds_value = SDS
                     st.session_state.sds_location = f"{lat:.6f}, {lon:.6f}"
                     st.session_state.sds_params = current_params
-                    st.info(f"SDS = {SDS:.3f} g")
+                    st.caption(f"SDS = {SDS:.3f} g")
                 except Exception as e:
                     st.error(f"Error fetching SDS: {e}")
 
             # Show cached SDS if available
             elif has_cached_sds:
                 SDS = st.session_state.sds_value
-                st.info(f"SDS = {SDS:.3f} g")
+                st.caption(f"SDS = {SDS:.3f} g")
         
         with col_map:
             # Map display
@@ -251,7 +262,7 @@ with col3:
         st.stop()
 
     # Calculations
-    CAR, Rpo = get_component_factors(component_data, component_name, location)
+    CAR, Rpo = get_component_factors(component_data, component_name, component_location)
     Hf, a1, a2 = calculate_hf(z, h, Ta)
     Rmu = calculate_rmu(R, Ie, Omega_0)
     Fp_coeff, Fp_calc_coeff, Fp_min_coeff, Fp_max_coeff = calculate_fp_coeff(SDS, Ip, Wp, Hf, Rmu, CAR, Rpo)
@@ -392,7 +403,7 @@ $$
         st.markdown(calc_text
             .replace("{SDS}", f"{SDS:.3f}")
             .replace("{ta_section}", ta_section)
-            .replace("{location}", str(location))
+            .replace("{location}", str(component_location))
             .replace("{selected_component_type}", component_name)
             .replace("{selected_sfrs_type}", selected_sfrs)
             .replace("{selected_structure_type}", selected_structure_type)
