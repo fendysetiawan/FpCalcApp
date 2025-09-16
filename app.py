@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import json
+import time
 from geopy.geocoders import Nominatim
 from streamlit_folium import st_folium
 import folium
@@ -35,6 +36,34 @@ st.markdown("""
 # Authentication
 login_ui()
 logout_ui()
+
+# Rate limiting for Nominatim API
+class RateLimitedGeocoder:
+    def __init__(self):
+        self.last_request_time = 0
+        self.min_interval = 1.0  # 1 second minimum between requests
+    
+    def geocode_with_rate_limit(self, address):
+        """Geocode address with rate limiting to comply with Nominatim policy"""
+        current_time = time.time()
+        time_since_last = current_time - self.last_request_time
+        
+        if time_since_last < self.min_interval:
+            sleep_time = self.min_interval - time_since_last
+            time.sleep(sleep_time)
+        
+        try:
+            geolocator = Nominatim(user_agent="FpCalc")
+            result = geolocator.geocode(address, timeout=10)
+            self.last_request_time = time.time()
+            return result
+        except Exception as e:
+            # Log the error but don't show it to user to avoid spam
+            st.warning("Geocoding service temporarily unavailable. Please use manual coordinates or try again later.")
+            return None
+
+# Initialize rate-limited geocoder
+rate_limited_geocoder = RateLimitedGeocoder()
 
 # Load Data
 def load_json(file):
@@ -169,7 +198,16 @@ with col2:
     SDS = None
     lat, lon = None, None
     default_lat, default_lon = 37.80423914364421, -122.27615639197262
-    default_address = "601 12th Street, Oakland 94607"
+    default_address = "601 12th Street, Oakland, CA 94607"
+    default_formatted_address = "601 City Center, 601, 12th Street, Old Oakland Historic District, Downtown Oakland, Oakland, Alameda County, California, 94607, United States"
+    
+    # Pre-cached default location to avoid API calls
+    default_location_cache = {
+        "address": default_address,
+        "latitude": default_lat,
+        "longitude": default_lon,
+        "formatted_address": default_formatted_address
+    }
 
     if sds_mode == "Fetch from USGS":
         coord_mode = st.radio("Location Input Method",
@@ -184,25 +222,33 @@ with col2:
                 lon = st.number_input("Longitude", value=default_lon, format="%.8f")
 
             elif coord_mode == "Address":
-                @st.cache_data(show_spinner=False)
+                @st.cache_data(show_spinner=False, ttl=3600)  # Cache for 1 hour to prevent repeated queries
                 def geocode(addr: str):
                     if not addr:
                         return None
-                    geolocator = Nominatim(user_agent="FpCalc")
-                    return geolocator.geocode(addr)
+                    return rate_limited_geocoder.geocode_with_rate_limit(addr)
                 
                 address = st.text_input(
                     "Enter Address (e.g. 601 12th Street, Oakland 94607)",
                     value=default_address,
                     placeholder="601 12th Street, Oakland 94607"
                 )
-                location = geocode(address.strip())
-                if location:
-                    lat, lon = location.latitude, location.longitude
-                    st.caption(f"🔍 {location.address}\n Latitude: {lat:.6f}, Longitude: {lon:.6f}")
+                
+                # Check if it's the default address and use cached result
+                if address.strip() == default_address:
+                    # Use pre-cached default location
+                    lat, lon = default_location_cache["latitude"], default_location_cache["longitude"]
+                    st.caption(f"🔍 {default_location_cache['formatted_address']}\n Latitude: {lat:.6f}, Longitude: {lon:.6f}")
                 else:
-                    if address:
-                        st.warning("Unable to geocode that address. Try refining it.")
+                    # Use geocoding API for other addresses
+                    location = geocode(address.strip())
+                    if location:
+                        lat, lon = location.latitude, location.longitude
+                        st.caption(f"🔍 {location.address}\n Latitude: {lat:.6f}, Longitude: {lon:.6f}")
+                        st.caption("Geocoding by [OpenStreetMap](https://www.openstreetmap.org/) via Nominatim")
+                    else:
+                        if address:
+                            st.warning("Unable to geocode that address. Try refining it or use manual coordinates.")
 
             site_class = st.selectbox("Site Class", ["A","B","BC","C","CD","D","DE","E","Default"], index=8)
 
