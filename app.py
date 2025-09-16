@@ -229,9 +229,9 @@ with col2:
                     return rate_limited_geocoder.geocode_with_rate_limit(addr)
                 
                 address = st.text_input(
-                    "Enter Address (e.g. 601 12th Street, Oakland 94607)",
+                    f"Building Address:",
                     value=default_address,
-                    placeholder="601 12th Street, Oakland 94607"
+                    placeholder=default_address
                 )
                 
                 # Check if it's the default address and use cached result
