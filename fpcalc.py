@@ -12,15 +12,28 @@ def get_sfrs_factors(sfrs_data, selected_sfrs):
     return 1.0, 1.0  # Default fallback
 
 def get_component_factors(component_data, component_name, location):
+    """Get component factors for ASCE 7-22 (CAR and Rpo)"""
     if component_name is None:
-        return 1.0, 1.0
-    key = "Component" if "Component" in component_data[0] else "Components"
+        return 1.0, 1.0, 1.0
     for row in component_data:
-        if row[key].strip().lower() == component_name.strip().lower():
+        if row["Component"].strip().lower() == component_name.strip().lower():
             car = row["CAR_below"] if location == "Supported At or Below Grade" else row["CAR_above"]
             rpo = row["Rpo"]
-            return car or 1.0, rpo or 1.5
-    return 1.0, 1.0  # Default fallback
+            omega = row["Omega"]
+            return car, rpo, omega
+    return 1.0, 1.0, 1.0  # Default fallback
+
+def get_component_factors_16(component_data, component_name):
+    """Get component factors for ASCE 7-16 (ap and Rp)"""
+    if component_name is None:
+        return 1.0, 1.0, 1.0
+    for row in component_data:
+        if row["Component"].strip().lower() == component_name.strip().lower():
+            ap = row["ap_16"]
+            rp = row["Rp_16"]
+            omega = row["Omega_16"]
+            return ap, rp, omega
+    return 1.0, 1.0, 1.0  # Default fallback
 
 def calculate_ta(period_data, structure_type, hn):
     if structure_type is None:
@@ -56,7 +69,22 @@ def calculate_rmu(R, Ie, Omega_0):
     except ZeroDivisionError:
         return 1.3
 
-def calculate_fp_coeff(SDS, Ip, Wp, Hf, Rmu, CAR, Rpo):
+def calculate_fp_coeff_16(SDS, Ip, ap, Rp, z_over_h):
+    """
+    Calculate Fp coefficient for ASCE 7-16
+    Fp = 0.4 * ap * Sds / (Rp / Ip) * (1 + 2 (z / h))
+    """
+    Fp_calc = 0.4 * ap * SDS / (Rp / Ip) * (1 + 2 * z_over_h)
+    Fp_min = 0.3 * SDS * Ip
+    Fp_max = 1.6 * SDS * Ip
+    Fp = max(min(Fp_calc, Fp_max), Fp_min)
+    return Fp, Fp_calc, Fp_min, Fp_max
+
+def calculate_fp_coeff_22(SDS, Ip, Hf, Rmu, CAR, Rpo):
+    """
+    Calculate Fp coefficient for ASCE 7-22
+    Fp = 0.4 * SDS * Ip * (Hf / Rmu) * (CAR / Rpo)
+    """
     Fp_calc = 0.4 * SDS * Ip * (Hf / Rmu) * (CAR / Rpo)
     Fp_min = 0.3 * SDS * Ip
     Fp_max = 1.6 * SDS * Ip
