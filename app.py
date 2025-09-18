@@ -107,12 +107,14 @@ with col1:
     # Display component factors for both ASCE versions if component is selected
     if component_name is not None:
         if asce_7_16:
-            ap, Rp, Omega_16 = get_component_factors_16(component_data, component_name)
-            st.caption(f"**ASCE 7-16:** ap = **{ap}** | Rp = **{Rp}** | Ω₀ = **{Omega_16}**")
+            ap_display, Rp_display, Omega_16_display = get_component_factors_16(component_data, component_name)
+            if ap_display is not None:
+                st.caption(f"**ASCE 7-16:** ap = **{ap_display}** | Rp = **{Rp_display}** | Ω₀ = **{Omega_16_display}**")
         if asce_7_22:
             CAR_above, Rpo, Omega = get_component_factors(component_data, component_name, "Supported Above Grade")
             CAR_below, _, Omega = get_component_factors(component_data, component_name, "Supported At or Below Grade")
-            st.caption(f"**ASCE 7-22:** Above Grade CAR = **{CAR_above}** | At or Below Grade CAR = **{CAR_below}** | Rpo = **{Rpo}** | Ω₀ = **{Omega}**")
+            if CAR_above is not None:
+                st.caption(f"**ASCE 7-22:** Above Grade CAR = **{CAR_above}** | At or Below Grade CAR = **{CAR_below}** | Rpo = **{Rpo}** | Ω₀ = **{Omega}**")
         
     col_ip, col_wp = st.columns(2)
     with col_ip:
@@ -339,35 +341,46 @@ with col2:
     # Calculate Fp coefficient for each selected ASCE version
     results = {}
     if asce_7_16:
-        Fp_coeff_16, Fp_calc_coeff_16, Fp_min_coeff_16, Fp_max_coeff_16 = calculate_fp_coeff_16(SDS, Ip, ap, Rp, z_over_h)
-        results["7-16"] = {
-            "Fp_coeff": Fp_coeff_16,
-            "Fp_calc_coeff": Fp_calc_coeff_16,
-            "Fp_min_coeff": Fp_min_coeff_16,
-            "Fp_max_coeff": Fp_max_coeff_16,
-            "Fp": Fp_coeff_16 * Wp,
-            "Emh_coeff": Omega_16 * Fp_coeff_16,
-            "Emh": Omega_16 * Fp_coeff_16 * Wp,
-            "ap": ap,
-            "Rp": Rp,
-            "Omega": Omega_16
-        }
+        ap, Rp, Omega_16 = get_component_factors_16(component_data, component_name)
+        if ap is not None:
+            Fp_coeff_16, Fp_calc_coeff_16, Fp_min_coeff_16, Fp_max_coeff_16 = calculate_fp_coeff_16(SDS, Ip, ap, Rp, z_over_h)
+            result_16 = {
+                "Fp_coeff": Fp_coeff_16,
+                "Fp_calc_coeff": Fp_calc_coeff_16,
+                "Fp_min_coeff": Fp_min_coeff_16,
+                "Fp_max_coeff": Fp_max_coeff_16,
+                "Fp": Fp_coeff_16 * Wp,
+                "ap": ap,
+                "Rp": Rp,
+                "Omega": Omega_16
+            }
+            if Omega_16 is not None:
+                result_16["Emh_coeff"] = Omega_16 * Fp_coeff_16
+                result_16["Emh"] = Omega_16 * Fp_coeff_16 * Wp
+            results["7-16"] = result_16
+        else:
+            results["7-16"] = None
     
     if asce_7_22:
         CAR, Rpo, Omega = get_component_factors(component_data, component_name, component_location)
-        Fp_coeff_22, Fp_calc_coeff_22, Fp_min_coeff_22, Fp_max_coeff_22 = calculate_fp_coeff_22(SDS, Ip, Hf, Rmu, CAR, Rpo)
-        results["7-22"] = {
-            "Fp_coeff": Fp_coeff_22,
-            "Fp_calc_coeff": Fp_calc_coeff_22,
-            "Fp_min_coeff": Fp_min_coeff_22,
-            "Fp_max_coeff": Fp_max_coeff_22,
-            "Fp": Fp_coeff_22 * Wp,
-            "Emh_coeff": Omega * Fp_coeff_22,
-            "Emh": Omega * Fp_coeff_22 * Wp,
-            "CAR": CAR,
-            "Rpo": Rpo,
-            "Omega": Omega
-        }
+        if CAR is not None:
+            Fp_coeff_22, Fp_calc_coeff_22, Fp_min_coeff_22, Fp_max_coeff_22 = calculate_fp_coeff_22(SDS, Ip, Hf, Rmu, CAR, Rpo)
+            result_22 = {
+                "Fp_coeff": Fp_coeff_22,
+                "Fp_calc_coeff": Fp_calc_coeff_22,
+                "Fp_min_coeff": Fp_min_coeff_22,
+                "Fp_max_coeff": Fp_max_coeff_22,
+                "Fp": Fp_coeff_22 * Wp,
+                "CAR": CAR,
+                "Rpo": Rpo,
+                "Omega": Omega
+            }
+            if Omega is not None:
+                result_22["Emh_coeff"] = Omega * Fp_coeff_22
+                result_22["Emh"] = Omega * Fp_coeff_22 * Wp
+            results["7-22"] = result_22
+        else:
+            results["7-22"] = None
 
     # Display Results 
     st.markdown("### ✅ :blue[Results]")
@@ -375,14 +388,28 @@ with col2:
     # Display results for each selected version
     if Wp > 0:
         for version, result in results.items():
-            st.markdown(f"###### :blue[ASCE {version}]: $F_{{p,coeff}} = {result['Fp_coeff']:.3f}, E_{{mh,coeff}} = {result['Emh_coeff']:.3f}$ \n $F_p = {result['Fp']:.0f}$ lb, $E_{{mh}} = {result['Emh']:.0f}$ lb (with $W_p = {Wp:.0f}$ lb)")
+            if result is not None:
+                if 'Emh_coeff' in result:
+                    st.markdown(f"###### :blue[ASCE {version}]: $F_{{p,coeff}} = {result['Fp_coeff']:.3f}, E_{{mh,coeff}} = {result['Emh_coeff']:.3f}$ \n $F_p = {result['Fp']:.0f}$ lb, $E_{{mh}} = {result['Emh']:.0f}$ lb (with $W_p = {Wp:.0f}$ lb)")
+                else:
+                    st.markdown(f"###### :blue[ASCE {version}]: $F_{{p,coeff}} = {result['Fp_coeff']:.3f}$ \n $F_p = {result['Fp']:.0f}$ lb (with $W_p = {Wp:.0f}$ lb)")
+                    st.caption(f"⚠️ Omega factor not available for ASCE {version}")
+            else:
+                st.caption(f"⚠️ No ASCE {version} factors found for the selected component.")
     else:
         for version, result in results.items():
-            st.markdown(f"###### :blue[ASCE {version}]: $F_{{p,coeff}} = {result['Fp_coeff']:.3f}, E_{{mh,coeff}} = {result['Emh_coeff']:.3f}$")
+            if result is not None:
+                if 'Emh_coeff' in result:
+                    st.markdown(f"###### :blue[ASCE {version}]: $F_{{p,coeff}} = {result['Fp_coeff']:.3f}, E_{{mh,coeff}} = {result['Emh_coeff']:.3f}$")
+                else:
+                    st.markdown(f"###### :blue[ASCE {version}]: $F_{{p,coeff}} = {result['Fp_coeff']:.3f}$")
+                    st.caption(f"⚠️ Omega factor not available for ASCE {version}")
+            else:
+                st.caption(f"⚠️ No ASCE {version} factors found for the selected component.")
         st.warning("Enter a non-zero $W_p$ to compute the seismic design force $F_p$.")
 
     # Calculation Details - Separate expanders for each ASCE version
-    if asce_7_16 and "7-16" in results:
+    if asce_7_16 and results["7-16"] is not None:
         with st.expander("🔢 ASCE 7-16 Calculation Details", expanded=False):
             result_16 = results["7-16"]
             
@@ -459,7 +486,7 @@ $$
 """
             st.markdown(calc_text_16)
             
-    if asce_7_22 and "7-22" in results:
+    if asce_7_22 and results["7-22"] is not None:
         with st.expander("🔢 ASCE 7-22 Calculation Details", expanded=False):
             result_22 = results["7-22"]
             
