@@ -505,7 +505,17 @@ $$
             if ta_mode != "Unknown":
                 Hf_expr = "1 + a_1 \\cdot \\left( \\frac{z }{h } \\right) + a_2 \\cdot \\left( \\frac{z }{h } \\right)^{10}"
                 Hf_num_expr = f"1 + {a1:.3f} · ({z_over_h:.3f}) + {a2:.3f} · ({z_over_h:.3f})^{{10}}"
-                Hf_case = r"Since $T_a$ is specified, use Eqn. 13.3-4"
+                Hf_case = f"""Since $T_a$ is specified, use Eqn. 13.3-4
+
+  $$
+  \\small
+  a_1 = \\min\\left(\\frac{{1}}{{T_a}}, 2.5\\right) = \\min\\left(\\frac{{1}}{{{Ta:.3f}}}, 2.5\\right) = {a1:.3f}
+  $$
+
+  $$
+  \\small
+  a_2 = \\max\\left(1 - \\left(\\frac{{0.4}}{{T_a}}\\right)^2, 0\\right) = \\max\\left(1 - \\left(\\frac{{0.4}}{{{Ta:.3f}}}\\right)^2, 0\\right) = {a2:.3f}
+  $$"""
             else:
                 Hf_expr = "1 + 2.5 \\cdot \\left( \\frac{z }{h } \\right)"
                 Hf_num_expr = f"1 + 2.5 · ({z_over_h:.3f})"
@@ -541,6 +551,8 @@ $$
 
   Component Type: _{component_name}_
 
+  Location: _{component_location}_
+
   $$
   \\small
   C_{{AR}} = {result_22['CAR']}, \\quad R_{{po}} = {result_22['Rpo']}
@@ -561,8 +573,6 @@ $$
   $$
 
 - **_Height Amplification Factor_**:
-
-  Location: _{component_location}_
 
   $$
   \\small
